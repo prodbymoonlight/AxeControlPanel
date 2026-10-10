@@ -1,0 +1,454 @@
+﻿<Window
+    x:Class="AxeControlPanel.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Axe_IO_One_reskin"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="AxeControlPanel // 1U Hardware Utility"
+    Width="535"
+    Height="420"
+    Background="#0B0C0D"
+    Foreground="#D1D4D7"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!--  Fysieke Rack componenten en metalen verlopen  -->
+        <LinearGradientBrush x:Key="BrushedAluminumRack" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Offset="0.0" Color="#1F2124" />
+            <GradientStop Offset="0.5" Color="#181A1C" />
+            <GradientStop Offset="1.0" Color="#151618" />
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="HardwareDisplayGlow" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="0.0" Color="#090A0B" />
+            <GradientStop Offset="1.0" Color="#050506" />
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="NeonOrangeGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Offset="0.0" Color="#FF6A00" />
+            <GradientStop Offset="1.0" Color="#FF3300" />
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="NeonOrangeHoverGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Offset="0.0" Color="#FF8822" />
+            <GradientStop Offset="1.0" Color="#FF5511" />
+        </LinearGradientBrush>
+
+        <!--  High-End Gefreesd Zwart Aluminium Rack-Schakelaar Stijl  -->
+        <Style x:Key="RackHardwareButton" TargetType="Button">
+            <Setter Property="Background" Value="#1A1C1E" />
+            <Setter Property="Foreground" Value="#A2A4A6" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Padding" Value="24,12" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#2D3033" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="buttonBody"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Subtiele Status LED  -->
+                                <Ellipse
+                                    x:Name="statusLED"
+                                    Grid.Column="0"
+                                    Width="6"
+                                    Height="6"
+                                    Margin="14,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Fill="#323538" />
+
+                                <ContentPresenter
+                                    Grid.Column="1"
+                                    Margin="0,0,14,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!--  Hover status: LED gaat gloeien via de juiste WPF Effect Setter  -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="buttonBody" Property="Background" Value="#222528" />
+                                <Setter TargetName="buttonBody" Property="BorderBrush" Value="#404347" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter TargetName="statusLED" Property="Fill" Value="#FF6A00" />
+                                <Setter TargetName="statusLED" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect
+                                            BlurRadius="8"
+                                            Opacity="0.8"
+                                            ShadowDepth="0"
+                                            Color="#FF5500" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="buttonBody" Property="Background" Value="#121315" />
+                                <Setter TargetName="buttonBody" Property="BorderBrush" Value="#1A1C1E" />
+                                <Setter TargetName="statusLED" Property="Fill" Value="#FF3300" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="buttonBody" Property="Background" Value="#0D0E10" />
+                                <Setter TargetName="buttonBody" Property="BorderBrush" Value="#1A1C1E" />
+                                <Setter Property="Foreground" Value="#3D4043" />
+                                <Setter TargetName="statusLED" Property="Fill" Value="#1A1C1E" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!--  De buitenste Grid vormt het fysieke 19-inch Rack-Panel  -->
+    <Grid Background="{StaticResource BrushedAluminumRack}">
+
+        <!--  VISUELE RACK-OREN (19&quot; Hardware zijkanten met schroefgaten look)  -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="480" />
+            <ColumnDefinition Width="15" />
+            <ColumnDefinition Width="500" />
+            <ColumnDefinition Width="20" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Linker Oor Decoratie  -->
+        <Border
+            Grid.Column="0"
+            Background="#141517"
+            BorderBrush="#25282B"
+            BorderThickness="0,0,1,0">
+            <Grid>
+                <Ellipse
+                    Width="6"
+                    Height="6"
+                    Margin="0,30,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Fill="#323538" />
+                <Ellipse
+                    Width="6"
+                    Height="6"
+                    Margin="0,0,0,30"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Fill="#323538" />
+            </Grid>
+        </Border>
+
+
+        <!--  KOLOM 2: SCHEIDINGSLIJK MET SUBTIEL HARDWARE PIJLTJE  -->
+        <Grid Grid.Column="2">
+            <!--  De verticale hardware scheidingslijn  -->
+            <Border
+                Margin="7,20,7,20"
+                BorderBrush="#111213"
+                BorderThickness="1,0,0,0" />
+
+            <!--  Het onopvallende pijltje  -->
+            <Button
+                x:Name="BtnToggleTerminal"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="BtnToggleTerminal_Click"
+                Content="&gt;"
+                Cursor="Hand"
+                FontSize="10"
+                FontWeight="Black"
+                Foreground="#323538">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <!--  Subtiele hover: licht zachtjes oranje op als je eroverheen zweeft  -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#FF6A00" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
+
+        <!--  HET ACTIEVE RACK-MAIN PANEL  -->
+        <Grid Grid.Column="1" Margin="25,30">
+            <StackPanel>
+
+                <!--  Rack Model & Merk Gravering  -->
+                <Grid Margin="0,0,0,25">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        FontWeight="Black"
+                        Foreground="#5D6266"
+                        Text="AXE CONTROL PANEL // ACP-1U" />
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        Foreground="#FF6A00"
+                        Text="[ BYPASSED // OK ]">
+                        <TextBlock.Effect>
+                            <DropShadowEffect
+                                BlurRadius="8"
+                                Opacity="0.4"
+                                ShadowDepth="0"
+                                Color="#FF6A00" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </Grid>
+
+                <!--  Verzonken OLED/LCD Hardware Matrix Display  -->
+                <Border
+                    Margin="0,0,0,25"
+                    Padding="20,15"
+                    Background="{StaticResource HardwareDisplayGlow}"
+                    BorderBrush="#111213"
+                    BorderThickness="2"
+                    CornerRadius="2">
+                    <!--  Fijne binnenste schaduw/rand voor die diepe inbouw-look  -->
+                    <Border BorderBrush="#222529" BorderThickness="0,1,0,0">
+                        <StackPanel Margin="0,5,0,0">
+                            <!--  Algemene Driver Status  -->
+                            <TextBlock
+                                x:Name="TxtStatus"
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#FFCC00"
+                                Text="CORE STATUS &gt; INITIALIZING CLOCK..." />
+
+                            <!--  De Echte Live Hardware Klok (Diep neon-oranje)  -->
+                            <TextBlock
+                                x:Name="TxtLiveSampleRate"
+                                Margin="0,6,0,0"
+                                FontFamily="Consolas"
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Foreground="#FF5500"
+                                Text="CLOCK RATE  &gt; SCANNED: 0.0 HZ [UNLOCKED]">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="4"
+                                        Opacity="0.5"
+                                        ShadowDepth="0"
+                                        Color="#FF5500" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+
+                            <!--  Actieve Buffer Informatie  -->
+                            <TextBlock
+                                x:Name="TxtCurrentBuffer"
+                                Margin="0,6,0,0"
+                                FontFamily="Consolas"
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Foreground="#6D7277"
+                                Text="ASIO MODULE &gt; SCANNED INTERFACE" />
+                        </StackPanel>
+                    </Border>
+                </Border>
+
+                <!--  Interface Ventilatierooster (Subtiele hardware lijntjes)  -->
+                <Rectangle
+                    Height="2"
+                    Margin="0,0,0,25"
+                    Fill="#111213" />
+
+                <!--  Instellingen Label  -->
+                <TextBlock
+                    Margin="2,0,0,8"
+                    FontSize="10"
+                    FontWeight="Black"
+                    Foreground="#4D5256"
+                    Text="PARAMETRIC BUFFER CONFIGURATION (SAMPLES)" />
+
+                <!--  Instellingen Label  -->
+                <TextBlock
+                    Margin="2,0,0,8"
+                    FontSize="10"
+                    FontWeight="Black"
+                    Foreground="#4D5256"
+                    Text="PARAMETRIC HARDWARE CONFIGURATION" />
+
+                <!--  PARAMETER MATRIX (4 Kolommen: Buffer, Sample Rate, Keep Alive, Registry)  -->
+                <Grid Margin="0,0,0,25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.2*" />
+                        <!--  Buffer  -->
+                        <ColumnDefinition Width="1*" />
+                        <!--  Sample Rate  -->
+                        <ColumnDefinition Width="Auto" />
+                        <!--  Keep Alive  -->
+                        <ColumnDefinition Width="Auto" />
+                        <!--  Registry Checkbox  -->
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Kolom 1: Buffer Dropdown  -->
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBlock
+                            Margin="0,0,0,4"
+                            FontSize="9"
+                            FontWeight="Bold"
+                            Foreground="#3D4246"
+                            Text="BUFFER (SAMPLES)" />
+                        <ComboBox
+                            x:Name="ComboBuffer"
+                            Padding="8,6"
+                            Background="#161719"
+                            BorderBrush="#222426"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="Black" />
+                    </StackPanel>
+
+                    <!--  Kolom 2: Sample Rate Dropdown  -->
+                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                        <TextBlock
+                            Margin="0,0,0,4"
+                            FontSize="9"
+                            FontWeight="Bold"
+                            Foreground="#3D4246"
+                            Text="SAMPLE RATE (HZ)" />
+                        <ComboBox
+                            x:Name="ComboSampleRate"
+                            Padding="8,6"
+                            Background="#161719"
+                            BorderBrush="#222426"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="Black"
+                            SelectionChanged="ComboSampleRate_SelectionChanged">
+                            <ComboBoxItem Content="44100" />
+                            <ComboBoxItem Content="48000" />
+                            <ComboBoxItem Content="88200" />
+                            <ComboBoxItem Content="96000" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!--  Kolom 3: Keep Alive Toggle  -->
+                    <StackPanel
+                        Grid.Column="2"
+                        Margin="0,0,10,2"
+                        VerticalAlignment="Bottom">
+                        <TextBlock
+                            Margin="0,0,0,6"
+                            HorizontalAlignment="Center"
+                            FontSize="9"
+                            FontWeight="Bold"
+                            Foreground="#3D4246"
+                            Text="KEEP ALIVE" />
+                        <CheckBox
+                            x:Name="ChkKeepAlive"
+                            Checked="ChkKeepAlive_Changed"
+                            Content="LOCK"
+                            Cursor="Hand"
+                            FontSize="10"
+                            FontWeight="Bold"
+                            Foreground="#8D9297"
+                            Unchecked="ChkKeepAlive_Changed" />
+                    </StackPanel>
+
+                    <!--  Kolom 4: Gloednieuwe Registry Inject Toggle  -->
+                    <StackPanel
+                        Grid.Column="3"
+                        Margin="0,0,5,2"
+                        VerticalAlignment="Bottom">
+                        <TextBlock
+                            Margin="0,0,0,6"
+                            HorizontalAlignment="Center"
+                            FontSize="9"
+                            FontWeight="Bold"
+                            Foreground="#3D4246"
+                            Text="REGISTRY INJECT" />
+                        <CheckBox
+                            x:Name="ChkRegistryInject"
+                            Content="INJECT"
+                            Cursor="Hand"
+                            FontSize="10"
+                            FontWeight="Bold"
+                            Foreground="#8D9297" />
+                    </StackPanel>
+                </Grid>
+
+                <!--  De Grote Zware Hardware Actieschakelaar  -->
+                <Button
+                    x:Name="BtnApply"
+                    Click="BtnApply_Click"
+                    Content="ENGAGE HARDWARE CLOCK"
+                    Style="{StaticResource RackHardwareButton}" />
+
+
+            </StackPanel>
+        </Grid>
+        <!--  ONDERDEEL 2: Het 16:9 Matrix-Groene Debug Display  -->
+        <Grid Grid.Column="3" Margin="15,30,10,30">
+            <StackPanel>
+
+                <!--  Terminal Header  -->
+                <Grid Margin="2,0,0,10">
+                    <TextBlock
+                        FontSize="11"
+                        FontWeight="Black"
+                        Foreground="#4D5256"
+                        Text="REAL-TIME TELEMETRY STREAM" />
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        FontSize="9"
+                        FontWeight="Bold"
+                        Foreground="#323538"
+                        Text="16:9 MATRIX BUS" />
+                </Grid>
+
+                <!--  De Verzonken Terminal Box  -->
+                <Border
+                    Height="285"
+                    Background="#050708"
+                    BorderBrush="#111213"
+                    BorderThickness="2"
+                    CornerRadius="3">
+                    <Grid Margin="12">
+                        <!--  ScrollViewer zorgt voor automatische scrollbar handling  -->
+                        <ScrollViewer x:Name="TerminalScroll" VerticalScrollBarVisibility="Hidden">
+                            <TextBlock
+                                x:Name="TxtTerminal"
+                                FontFamily="Consolas"
+                                FontSize="11"
+                                Foreground="#00FF64"
+                                LineHeight="18"
+                                TextWrapping="Wrap">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="4"
+                                        Opacity="0.3"
+                                        ShadowDepth="0"
+                                        Color="#00FF64" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
