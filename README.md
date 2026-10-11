@@ -1,4 +1,7 @@
-﻿# 🛠️ AxeOneClockFixer (AXE I/O One ASIO Buffer Bypass)
+﻿# Quick disclaimer
+Yes this readme will be replaced and written by myself, for now this is a quick placeholder. 
+
+# 🛠️ AxeOneClockFixer (AXE I/O One ASIO Buffer Bypass)
 
 A lightweight, high-performance open-source utility designed to bypass the notorious **`ASE_NoClock`** and `(no choices)` driver bug plaguing the **IK Multimedia AXE I/O One** audio interface on Windows 11.
 

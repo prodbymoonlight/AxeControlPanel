@@ -31,6 +31,9 @@ namespace AxeControlPanel
             InitializeComponent();
             ComboSampleRate.SelectedIndex = 0;
             CheckAsioDriverStatus();
+
+            // Temporary
+            LogToTerminal("warning", "Currently in development..");
         }
 
         #region Apply Button
@@ -354,6 +357,9 @@ namespace AxeControlPanel
             {
                 case "system":
                     prefixColor = System.Windows.Media.Brushes.Silver;
+                    break;
+                case "warnig":
+                    prefixColor = System.Windows.Media.Brushes.Orange;
                     break;
                 case "error":
                     prefixColor = System.Windows.Media.Brushes.Crimson;
