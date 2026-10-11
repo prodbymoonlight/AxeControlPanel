@@ -10,7 +10,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NAudio.Wave;
 using NAudio.Wave.Asio;
-using Microsoft.Win32;
+using Microsoft.Win32; 
 
 namespace AxeControlPanel
 {

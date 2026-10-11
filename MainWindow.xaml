@@ -14,7 +14,6 @@
     WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <!--  Fysieke Rack componenten en metalen verlopen  -->
         <LinearGradientBrush x:Key="BrushedAluminumRack" StartPoint="0,0" EndPoint="1,0">
             <GradientStop Offset="0.0" Color="#1F2124" />
             <GradientStop Offset="0.5" Color="#181A1C" />
@@ -36,7 +35,6 @@
             <GradientStop Offset="1.0" Color="#FF5511" />
         </LinearGradientBrush>
 
-        <!--  High-End Gefreesd Zwart Aluminium Rack-Schakelaar Stijl  -->
         <Style x:Key="RackHardwareButton" TargetType="Button">
             <Setter Property="Background" Value="#1A1C1E" />
             <Setter Property="Foreground" Value="#A2A4A6" />
@@ -61,7 +59,6 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <!--  Subtiele Status LED  -->
                                 <Ellipse
                                     x:Name="statusLED"
                                     Grid.Column="0"
@@ -79,7 +76,6 @@
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <!--  Hover status: LED gaat gloeien via de juiste WPF Effect Setter  -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="buttonBody" Property="Background" Value="#222528" />
                                 <Setter TargetName="buttonBody" Property="BorderBrush" Value="#404347" />
@@ -115,10 +111,8 @@
         </Style>
     </Window.Resources>
 
-    <!--  De buitenste Grid vormt het fysieke 19-inch Rack-Panel  -->
     <Grid Background="{StaticResource BrushedAluminumRack}">
 
-        <!--  VISUELE RACK-OREN (19&quot; Hardware zijkanten met schroefgaten look)  -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
             <ColumnDefinition Width="480" />
@@ -127,7 +121,6 @@
             <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
 
-        <!--  Linker Oor Decoratie  -->
         <Border
             Grid.Column="0"
             Background="#141517"
@@ -152,15 +145,12 @@
         </Border>
 
 
-        <!--  KOLOM 2: SCHEIDINGSLIJK MET SUBTIEL HARDWARE PIJLTJE  -->
         <Grid Grid.Column="2">
-            <!--  De verticale hardware scheidingslijn  -->
             <Border
                 Margin="7,20,7,20"
                 BorderBrush="#111213"
                 BorderThickness="1,0,0,0" />
 
-            <!--  Het onopvallende pijltje  -->
             <Button
                 x:Name="BtnToggleTerminal"
                 HorizontalAlignment="Center"
@@ -176,7 +166,6 @@
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
-                            <!--  Subtiele hover: licht zachtjes oranje op als je eroverheen zweeft  -->
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Foreground" Value="#FF6A00" />
                             </Trigger>
@@ -187,11 +176,9 @@
         </Grid>
 
 
-        <!--  HET ACTIEVE RACK-MAIN PANEL  -->
         <Grid Grid.Column="1" Margin="25,30">
             <StackPanel>
 
-                <!--  Rack Model & Merk Gravering  -->
                 <Grid Margin="0,0,0,25">
                     <TextBlock
                         HorizontalAlignment="Left"
@@ -217,7 +204,6 @@
                     </TextBlock>
                 </Grid>
 
-                <!--  Verzonken OLED/LCD Hardware Matrix Display  -->
                 <Border
                     Margin="0,0,0,25"
                     Padding="20,15"
@@ -225,10 +211,8 @@
                     BorderBrush="#111213"
                     BorderThickness="2"
                     CornerRadius="2">
-                    <!--  Fijne binnenste schaduw/rand voor die diepe inbouw-look  -->
                     <Border BorderBrush="#222529" BorderThickness="0,1,0,0">
                         <StackPanel Margin="0,5,0,0">
-                            <!--  Algemene Driver Status  -->
                             <TextBlock
                                 x:Name="TxtStatus"
                                 FontFamily="Consolas"
@@ -237,7 +221,6 @@
                                 Foreground="#FFCC00"
                                 Text="CORE STATUS &gt; INITIALIZING CLOCK..." />
 
-                            <!--  De Echte Live Hardware Klok (Diep neon-oranje)  -->
                             <TextBlock
                                 x:Name="TxtLiveSampleRate"
                                 Margin="0,6,0,0"
@@ -255,7 +238,6 @@
                                 </TextBlock.Effect>
                             </TextBlock>
 
-                            <!--  Actieve Buffer Informatie  -->
                             <TextBlock
                                 x:Name="TxtCurrentBuffer"
                                 Margin="0,6,0,0"
@@ -268,13 +250,11 @@
                     </Border>
                 </Border>
 
-                <!--  Interface Ventilatierooster (Subtiele hardware lijntjes)  -->
                 <Rectangle
                     Height="2"
                     Margin="0,0,0,25"
                     Fill="#111213" />
 
-                <!--  Instellingen Label  -->
                 <TextBlock
                     Margin="2,0,0,8"
                     FontSize="10"
@@ -282,7 +262,6 @@
                     Foreground="#4D5256"
                     Text="PARAMETRIC BUFFER CONFIGURATION (SAMPLES)" />
 
-                <!--  Instellingen Label  -->
                 <TextBlock
                     Margin="2,0,0,8"
                     FontSize="10"
@@ -290,20 +269,14 @@
                     Foreground="#4D5256"
                     Text="PARAMETRIC HARDWARE CONFIGURATION" />
 
-                <!--  PARAMETER MATRIX (4 Kolommen: Buffer, Sample Rate, Keep Alive, Registry)  -->
                 <Grid Margin="0,0,0,25">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1.2*" />
-                        <!--  Buffer  -->
                         <ColumnDefinition Width="1*" />
-                        <!--  Sample Rate  -->
                         <ColumnDefinition Width="Auto" />
-                        <!--  Keep Alive  -->
                         <ColumnDefinition Width="Auto" />
-                        <!--  Registry Checkbox  -->
                     </Grid.ColumnDefinitions>
 
-                    <!--  Kolom 1: Buffer Dropdown  -->
                     <StackPanel Grid.Column="0" Margin="0,0,8,0">
                         <TextBlock
                             Margin="0,0,0,4"
@@ -321,7 +294,6 @@
                             Foreground="Black" />
                     </StackPanel>
 
-                    <!--  Kolom 2: Sample Rate Dropdown  -->
                     <StackPanel Grid.Column="1" Margin="0,0,10,0">
                         <TextBlock
                             Margin="0,0,0,4"
@@ -345,7 +317,6 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <!--  Kolom 3: Keep Alive Toggle  -->
                     <StackPanel
                         Grid.Column="2"
                         Margin="0,0,10,2"
@@ -368,7 +339,6 @@
                             Unchecked="ChkKeepAlive_Changed" />
                     </StackPanel>
 
-                    <!--  Kolom 4: Gloednieuwe Registry Inject Toggle  -->
                     <StackPanel
                         Grid.Column="3"
                         Margin="0,0,5,2"
@@ -390,7 +360,6 @@
                     </StackPanel>
                 </Grid>
 
-                <!--  De Grote Zware Hardware Actieschakelaar  -->
                 <Button
                     x:Name="BtnApply"
                     Click="BtnApply_Click"
@@ -400,11 +369,9 @@
 
             </StackPanel>
         </Grid>
-        <!--  ONDERDEEL 2: Het 16:9 Matrix-Groene Debug Display  -->
         <Grid Grid.Column="3" Margin="15,30,10,30">
             <StackPanel>
 
-                <!--  Terminal Header  -->
                 <Grid Margin="2,0,0,10">
                     <TextBlock
                         FontSize="11"
@@ -419,7 +386,6 @@
                         Text="16:9 MATRIX BUS" />
                 </Grid>
 
-                <!--  De Verzonken Terminal Box  -->
                 <Border
                     Height="285"
                     Background="#050708"
@@ -427,7 +393,6 @@
                     BorderThickness="2"
                     CornerRadius="3">
                     <Grid Margin="12">
-                        <!--  ScrollViewer zorgt voor automatische scrollbar handling  -->
                         <ScrollViewer x:Name="TerminalScroll" VerticalScrollBarVisibility="Hidden">
                             <TextBlock
                                 x:Name="TxtTerminal"
